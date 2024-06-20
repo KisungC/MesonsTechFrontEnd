@@ -33,7 +33,7 @@ export default function TaskItem({buttonFunc, id})
     const handleSubmit = (e) => {       /* When "Delete" button is clicked, deletes the item data on DynamoDB */
       e.preventDefault();
 
-      fetch(`http://localhost:5000/tasks/${id}`,{
+      fetch(`http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/${id}`,{
         method:'DELETE'})
         .then(res=>res.json())
         .then(data=>{
@@ -50,7 +50,11 @@ export default function TaskItem({buttonFunc, id})
           {
             console.log(err)
             setError(true)
+            setShowDelete(false)
             setShowAlert(true)
+            setTimeout(()=>{
+              window.location.reload(); /* After user read the message, reload the page */
+            }, 1500)
           })
     }
 

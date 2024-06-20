@@ -21,10 +21,10 @@ export default function TaskForm({ id, handleClose }) {
     };
 
     {/* Adding conditional, if it's POST or PUT request */}
-    let url = "http://localhost:5000/tasks/";
+    let url = "http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/";
     let apiReq = "POST";
     if (id) {
-      url = `http://localhost:5000/tasks/${id}`;
+      url = `http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/${id}`;
       apiReq = "PUT";
     }
 
