@@ -1,41 +1,64 @@
 import TaskForm from "./TaskForm"
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import { AlertDialog } from "react-bootstrap"
 import {useState} from 'react'
+import ShowAlertPanel from "./ShowAlertPanel"
 
 export default function TaskItem({buttonFunc, id})
 {
-    const [showDelete, setShowDelete] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
+    //for error handling
+    const [isError, setError] = useState(true)
+    const [showAlert, setShowAlert] = useState(false)
 
-    const handleClose = buttonFunc == "Update" ? ()=>setShowUpdate(false) : () => setShowDelete(false);
-  
+    //for Modals
+    const [showDelete, setShowDelete] = useState(false)
+    const [showUpdate, setShowUpdate] = useState(false)
+
+    function handleClose(){
+      if (buttonFunc == "Update")
+        {setShowUpdate(false)}
+      else {setShowDelete(false)}
+    } 
     const buttonVariant = buttonFunc == "Update" ? "primary" : "danger"
-    const buttonOnClick = () => {
+
+    const buttonOnClick = () => {       /* For showing Modal on the screen, conditional upon buttonFunc */
       if (buttonFunc === 'Update') {
-        setShowUpdate(true);
+        setShowUpdate(true)
       } else {
-        setShowDelete(true);
+        setShowDelete(true)
       }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e) => {       /* When "Delete" button is clicked, deletes the item data on DynamoDB */
       e.preventDefault();
-
-      handleClose;
 
       fetch(`http://localhost:5000/tasks/${id}`,{
         method:'DELETE'})
         .then(res=>res.json())
-        .then(data=>console.log(data))
-        .catch(err=>console.log(err))
+        .then(data=>{
+          console.log(data)
+          setError(false)
+          setShowDelete(false)
+          setShowAlert(true)
+          setTimeout(()=>{
+            window.location.reload();
+          }, 1500)
+          
+        })
+        .catch(err=>
+          {
+            console.log(err)
+            setError(true)
+            setShowAlert(true)
+          })
     }
 
     return(
         <>            
-            <Button variant={buttonVariant} size="sm" onClick={buttonOnClick}> {buttonFunc}</Button>
+            <Button variant={buttonVariant} size="sm" onClick={buttonOnClick}> {buttonFunc}</Button>  {/* Update/Delete Button */}
 
-            {/**Delete Modal */}
+            {/**Delete Confirmation Modal */}
             <Modal show={showDelete} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Deletion</Modal.Title>
@@ -50,17 +73,20 @@ export default function TaskItem({buttonFunc, id})
                 </Button>
               </Modal.Footer>
             </Modal>
-                
+
             {/**Update Modal */}
             <Modal show={showUpdate} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Update Task</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <p>If the field is empty, then it won't update</p>
-                <TaskForm id={id}/>
+                <p>If the field is empty, then it won't update the corresponding data</p>
+                <TaskForm id={id} handleClose={handleClose}/>
               </Modal.Body>
             </Modal>
+
+            {showAlert ? <ShowAlertPanel type="Delete" result={isError} /> : null}
+
         </>
     )
 }

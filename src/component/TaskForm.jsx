@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
+import ShowAlertPanel from "./ShowAlertPanel";
 
-export default function TaskForm({ id }) {
+export default function TaskForm({ id, handleClose }) {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [taskStat, setTaskStat] = useState("");
   const [taskDate, setTaskDate] = useState("");
 
-  const handleSubmit = (e) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [isError, setError] = useState(false);
+
+  const handleSubmit = (e) => {     {/* When sumbit button is clicked, do fetch api */}
     e.preventDefault();
     const taskData = {
       title: taskTitle,
@@ -17,6 +20,7 @@ export default function TaskForm({ id }) {
       dueDate: taskDate,
     };
 
+    {/* Adding conditional, if it's POST or PUT request */}
     let url = "http://localhost:5000/tasks/";
     let apiReq = "POST";
     if (id) {
@@ -24,19 +28,33 @@ export default function TaskForm({ id }) {
       apiReq = "PUT";
     }
 
-    console.log(url)
-
     fetch(url, {
       method: apiReq,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(taskData),
     })
       .then((res) => res.json())
-      .then((data) => {console.log(data)})
-      .catch((err) => console.log(err));
+      .then((data) => {
+        console.log(data)
+        setError(false)
+        setTimeout(()=>{
+            handleClose()           //closes modal
+        },1000)
+        
+        setShowAlert(true)
+        setTimeout(()=>{
+            window.location.reload();
+          }, 1500)
+    })
+      .catch((err) => {
+        console.log(err)
+        setError(true)
+        handleClose()
+        setShowAlert(true)
+    });
+      //TODO: reroute it to /tasks
   };
-  //get all the information from the form, do not use api here.
-  //props is existing data api id, if props, then use navigation to task/[id] with all the information from the form
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -44,8 +62,8 @@ export default function TaskForm({ id }) {
           <Form.Control
             type="text"
             placeholder="Title"
-            onChange={(e) => setTaskTitle(e.target.value)}
-          />
+            onChange={(e) => setTaskTitle(e.target.value)}      
+          />                                                    {/* Set client data into a variable */}
         </Form.Group>
         <Form.Group controlId="formDescription">
           <Form.Control
@@ -75,6 +93,9 @@ export default function TaskForm({ id }) {
           </Button>
         </div>
       </Form>
+
+        {showAlert?<ShowAlertPanel type={id?"Update":"Create"} result={isError}/>:null}
+
     </>
   );
 }

@@ -10,14 +10,17 @@ export default function TaskList()
     const [loading, setLoading] = useState(true);
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    function handleClose()
+    {
+        setShow(false);
+    }
     const handleShow = () => setShow(true);
   
     useEffect(() => {
         fetch("http://localhost:5000/tasks/")           //getting API from backend
           .then(res => res.json())                      // Call res.json() correctly
           .then(data => {
-            setTaskData(data)
+            setTaskData(data)                           //setting data into the variable to work with
             setLoading(false)
           })
           .catch(error => {
@@ -52,7 +55,7 @@ export default function TaskList()
                       <td>{status}</td>
                       <td>{dueDate}</td>
                       <td className="text-end">
-                        <TaskItem buttonFunc="Update" id={id} />
+                        <TaskItem buttonFunc="Update" id={id} />                {/* Creating Modal for Update and Delete */}
                         <TaskItem buttonFunc="Delete" id={id} />
                       </td>
                     </tr>
@@ -60,13 +63,13 @@ export default function TaskList()
                 );
               })}
               <tr>
-                <td />
+                <td />                                          {/* adding empty columns for "Create" button spacing */}
                 <td />
                 <td />
                 <td />
                 <td className="text-end">
-                  <Button variant="primary" onClick={handleShow}>
-                    {/**onclick, put it into modal with taskForm() */}Create
+                  <Button variant="primary" onClick={handleShow}>   {/* Cliking the "Create", put it into modal with taskForm() */}
+                    Create                                          {/* Decided not to use TaskItem due to project spec */}
                   </Button>
                 </td>
               </tr>
@@ -74,11 +77,11 @@ export default function TaskList()
           </Table>
         </div>
 
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose}>                    {/* Modal for Create button */}
           <Modal.Header closeButton>
             <Modal.Title>Create Task</Modal.Title>
           </Modal.Header>
-          <Modal.Body><TaskForm/></Modal.Body>
+          <Modal.Body><TaskForm handleClose={handleClose}/></Modal.Body>
         </Modal>
       </>
     );
