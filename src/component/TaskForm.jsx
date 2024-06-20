@@ -38,10 +38,9 @@ export default function TaskForm({ id, handleClose }) {
         console.log(data)
         setError(false)
         setTimeout(()=>{
-            handleClose()           //closes modal
-        },1000)
-        
-        setShowAlert(true)
+            handleClose()           //Closes modal
+        },1500)
+          setShowAlert(true)        //Show alert modal
         setTimeout(()=>{
             window.location.reload();
           }, 1500)
@@ -51,8 +50,10 @@ export default function TaskForm({ id, handleClose }) {
         setError(true)
         handleClose()
         setShowAlert(true)
+        setTimeout(()=>{
+          window.location.reload();
+        }, 1500)
     });
-      //TODO: reroute it to /tasks
   };
 
   return (

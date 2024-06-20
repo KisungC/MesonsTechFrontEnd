@@ -39,10 +39,10 @@ export default function TaskItem({buttonFunc, id})
         .then(data=>{
           console.log(data)
           setError(false)
-          setShowDelete(false)
-          setShowAlert(true)
+          setShowDelete(false)        /* Close Delete Modal */
+          setShowAlert(true)          /* Open Alert Modal */
           setTimeout(()=>{
-            window.location.reload();
+            window.location.reload(); /* After user read the message, reload the page */
           }, 1500)
           
         })
@@ -81,7 +81,7 @@ export default function TaskItem({buttonFunc, id})
               </Modal.Header>
               <Modal.Body>
                 <p>If the field is empty, then it won't update the corresponding data</p>
-                <TaskForm id={id} handleClose={handleClose}/>
+                <TaskForm id={id} handleClose={handleClose}/>           {/* Populate Form in the body  */}
               </Modal.Body>
             </Modal>
 
