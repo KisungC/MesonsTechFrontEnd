@@ -21,10 +21,10 @@ export default function TaskForm({ id, handleClose }) {
     };
 
     {/* Adding conditional, if it's POST or PUT request */}
-    let url = "http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/";
+    let url = "https://Mesonsprojecttester.ca-central-1.elasticbeanstalk.com";
     let apiReq = "POST";
     if (id) {
-      url = `http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/${id}`;
+      url = `https://Mesonsprojecttester.ca-central-1.elasticbeanstalk.com/${id}`;
       apiReq = "PUT";
     }
 
@@ -48,7 +48,9 @@ export default function TaskForm({ id, handleClose }) {
       .catch((err) => {
         console.log(err)
         setError(true)
-        handleClose()
+        setTimeout(()=>{
+          handleClose()           //Closes modal
+      },1500)
         setShowAlert(true)
         setTimeout(()=>{
           window.location.reload();

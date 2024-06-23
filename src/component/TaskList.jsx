@@ -17,7 +17,7 @@ export default function TaskList()
     const handleShow = () => setShow(true);
   
     useEffect(() => {
-        fetch("http://mesonstechprojectbackend.ca-central-1.elasticbeanstalk.com/tasks/")           //getting API from backend
+        fetch("https://Mesonsprojecttester.ca-central-1.elasticbeanstalk.com")           //getting API from backend
           .then(res => res.json())                      // Call res.json() correctly
           .then(data => {
             setTaskData(data)                           //setting data into the variable to work with
