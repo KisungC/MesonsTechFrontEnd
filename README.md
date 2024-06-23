@@ -4,7 +4,28 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Running backend and frontend locally. (Optional)
+
+1. Download the backend, please go to [this link](https://github.com/KisungC/CRUDSpringBootDynamoDB)
+
+2. Run the backend application.
+
+3. Change the fetch api command to "localhost:5000" located in /src/component/TaskItem.jsx and TaskForm.jsx
+
+This application uses:
+
+1. react-bootstrap
+
+2. react-dom
+
+3. react-router-dom
+
+Make sure to install the package before running the application:
+```bash
+npm i react-bootstrap react-dom react-router-dom
+```
+
+Run the development server:
 
 ```bash
 npm run dev
